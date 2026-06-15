@@ -27,6 +27,11 @@ export interface FormData {
   phone: string;
   category: Category;
 
+  // Guardian info (required when main registrant is child_3_12)
+  guardianName: string;
+  guardianEmail: string;
+  guardianPhone: string;
+
   // Main registrant — health & food
   foodAllergies: boolean;
   allergiesDetails: string;

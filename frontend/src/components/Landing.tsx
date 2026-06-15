@@ -13,7 +13,7 @@ interface LandingProps {
 
 const pricingCards = [
   { label: 'Working Adults', price: CATEGORY_RATES.working_adult },
-  { label: 'Ministry / Housewives / Students', price: CATEGORY_RATES.ministry_housewife_student },
+  { label: 'Ministry / Homemakers / Students', price: CATEGORY_RATES.ministry_housewife_student },
   { label: 'Children (3–12 yrs)', price: CATEGORY_RATES.child_3_12 },
   { label: 'Seminar (food, no lodging)', price: CATEGORY_RATES.seminar },
 ];
@@ -55,7 +55,7 @@ const Landing = ({ onNext }: LandingProps) => {
         )}
       </div>
 
-      <h2 className="section-title">Welcome — let's get you registered</h2>
+      <h2 className="section-title">Let's get you registered!</h2>
       <p className="section-subtitle">
         Join us for <strong>{CAMP.theme}</strong>, our {CAMP.name.toLowerCase()} with guest speaker{' '}
         {CAMP.speaker}.
@@ -91,7 +91,7 @@ const Landing = ({ onNext }: LandingProps) => {
             <strong>Family package:</strong>{' '}
             {FAMILY_DISCOUNT_TIERS.map((t) => t.label).reverse().join(' · ')} (on registration fees)
           </li>
-          <li>Children under 3 attend free.</li>
+          <li>Children under 3 may attend free — add them as a family member when a parent/guardian registers.</li>
           <li>
             Optional room upgrades available — extra mattress (RM {MATTRESS_PER_NIGHT}/night) or a
             two-room suite for families.

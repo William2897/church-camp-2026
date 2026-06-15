@@ -20,6 +20,9 @@ const initialFormData: FormData = {
   gender: '',
   phone: '',
   category: 'working_adult',
+  guardianName: '',
+  guardianEmail: '',
+  guardianPhone: '',
   foodAllergies: false,
   allergiesDetails: '',
   healthIssues: false,
@@ -112,6 +115,9 @@ const App = () => {
           healthIssues: formData.healthIssues,
           healthDetails: formData.healthDetails,
         },
+        guardian: formData.category === 'child_3_12'
+          ? { name: formData.guardianName, email: formData.guardianEmail, phone: formData.guardianPhone }
+          : null,
         hasFamily: formData.hasFamily,
         familyDetails: formData.hasFamily ? formData.familyDetails : [],
         accommodation: formData.accommodation,

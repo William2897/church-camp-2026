@@ -144,6 +144,15 @@ const ReviewTerms = ({ formData, setFormData, onNext, onBack }: Props) => {
           </div>
         </div>
 
+        {/* Guardian info (child 3–12 main registrant) */}
+        {formData.category === 'child_3_12' && formData.guardianName && (
+          <div className="text-sm bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg px-4 py-3">
+            <p className="font-semibold text-blue-800 dark:text-blue-300 mb-1">Guardian</p>
+            <p className="text-slate-700 dark:text-slate-200">{formData.guardianName}</p>
+            <p className="text-slate-500 dark:text-slate-400">{formData.guardianEmail} · {formData.guardianPhone}</p>
+          </div>
+        )}
+
         {/* Accommodation */}
         <div className="text-sm bg-slate-100 dark:bg-slate-800/60 rounded-lg px-4 py-3">
           <span className="text-slate-500 dark:text-slate-400">Accommodation: </span>

@@ -16,7 +16,7 @@ export const CAMP = {
   },
   contacts: [
     { name: 'William', phone: '01160937110', display: '011-6093 7110' },
-    { name: 'Kimberley', phone: '01119887239', display: '011-1988 7239' },
+    { name: 'Karshni', phone: '01154117197', display: '011-5411 7197' },
   ],
 };
 
@@ -52,7 +52,7 @@ export const CATEGORY_RATES: Record<Category, number> = {
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   working_adult: 'Working Adult',
-  ministry_housewife_student: 'Ministry Worker / Housewife / Student',
+  ministry_housewife_student: 'Ministry Worker / Homemaker / Student',
   child_3_12: 'Child (3–12 years)',
   child_under_3: 'Child (under 3)',
   seminar: 'Seminar Attendee (food only, no lodging)',

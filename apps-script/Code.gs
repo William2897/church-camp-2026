@@ -14,7 +14,7 @@ var PROOF_FOLDER_NAME = 'Camp 2026 — Payment Proofs';
 
 var CATEGORY_LABELS = {
   working_adult: 'Working Adult',
-  ministry_housewife_student: 'Ministry / Housewife / Student',
+  ministry_housewife_student: 'Ministry / Homemaker / Student',
   child_3_12: 'Child (3-12)',
   child_under_3: 'Child (under 3)',
   seminar: 'Seminar Attendee',
@@ -100,6 +100,14 @@ function doPost(e) {
     // 2) Bookings sheet — one summary row.
     var bookings = getOrCreateSheet(ss, 'Bookings', BOOKINGS_HEADERS);
     var paxCount = 1 + family.length;
+    var guardianNote = '';
+    if (data.guardian && r.category === 'child_3_12') {
+      guardianNote = 'Guardian: ' + (data.guardian.name || '') +
+        ' / ' + (data.guardian.email || '') +
+        ' / ' + (data.guardian.phone || '');
+    }
+    var notes = collectNotes(r, family);
+    if (guardianNote) notes = guardianNote + (notes ? ' | ' + notes : '');
     bookings.appendRow([
       timestamp,
       bookingId,
@@ -116,7 +124,7 @@ function doPost(e) {
       num(pricing.finalTotal),
       labelPayment(data.paymentMethod),
       proofLink,
-      collectNotes(r, family),
+      notes,
     ]);
 
     // 3) Members sheet — one row per person.
@@ -327,6 +335,12 @@ function buildEmailHtml(bookingId, data, proofLink) {
         '<table style="width:100%;font-size:14px;margin:12px 0;">' +
           '<tr><td style="color:#64748b;width:90px;">Dates</td><td>' + CAMP.dates + '</td></tr>' +
           '<tr><td style="color:#64748b;">Venue</td><td>' + CAMP.venue + '</td></tr></table>' +
+        (data.guardian && r.category === 'child_3_12'
+          ? '<p style="background:#eff6ff;border-radius:8px;padding:10px 14px;font-size:13px;margin:12px 0;">' +
+            '<strong>Guardian:</strong> ' + escapeHtml(data.guardian.name || '') +
+            ' &middot; ' + escapeHtml(data.guardian.email || '') +
+            ' &middot; ' + escapeHtml(data.guardian.phone || '') + '</p>'
+          : '') +
         '<h3 style="font-size:15px;margin:18px 0 6px;">Who\'s registered</h3>' +
         '<ul style="margin:0;padding-left:18px;font-size:14px;">' + people + '</ul>' +
         '<h3 style="font-size:15px;margin:18px 0 6px;">Accommodation</h3>' +
