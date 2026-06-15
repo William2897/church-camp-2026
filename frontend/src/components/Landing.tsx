@@ -15,7 +15,7 @@ const pricingCards = [
   { label: 'Working Adults', price: CATEGORY_RATES.working_adult },
   { label: 'Ministry / Homemakers / Students', price: CATEGORY_RATES.ministry_housewife_student },
   { label: 'Children (3–12 yrs)', price: CATEGORY_RATES.child_3_12 },
-  { label: 'Seminar (food, no lodging)', price: CATEGORY_RATES.seminar },
+  { label: 'Seminar (food, no lodging)', price: CATEGORY_RATES.seminar }, 
 ];
 
 // The poster file may be saved as .jpg, .jpeg, or .png — try each in turn.
@@ -56,10 +56,6 @@ const Landing = ({ onNext }: LandingProps) => {
       </div>
 
       <h2 className="section-title">Let's get you registered!</h2>
-      <p className="section-subtitle">
-        Join us for <strong>{CAMP.theme}</strong>, our {CAMP.name.toLowerCase()} with guest speaker{' '}
-        {CAMP.speaker}.
-      </p>
 
       {/* Event details */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
