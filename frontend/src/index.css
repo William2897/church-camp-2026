@@ -81,3 +81,6 @@
 .phone-input-container .country-list .country.highlight {
   @apply bg-sunrise-50 dark:bg-slate-700;
 }
+.phone-error .form-control {
+  @apply border-red-500 !important;
+}

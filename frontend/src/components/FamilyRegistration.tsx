@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { Plus, Trash2, Users, Info } from 'lucide-react';
 import { FormData, FamilyMember } from '../utils/types';
 import { Category, CATEGORY_LABELS, CATEGORY_RATES, MIN_FAMILY_PAX } from '../utils/campConfig';
-import { getCategoriesByAge, getFamilyDiscountTier, needsLodging } from '../utils/pricing';
+import { calculateAge, getCategoriesByAge, getFamilyDiscountTier, needsLodging } from '../utils/pricing';
 
 interface Props {
   formData: FormData;
@@ -28,7 +28,11 @@ const emptyMember = (): FamilyMember => ({
 const validatePhone = (phone: string): boolean =>
   phone.replace(/[\s\-()]/g, '').length >= 9;
 
+const isChildCategory = (category: Category): boolean =>
+  category === 'child_3_12' || category === 'child_under_3';
+
 const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) => {
+  const [memberErrors, setMemberErrors] = useState<Record<number, string[]>>({});
   const maxDate = new Date().toISOString().split('T')[0];
   const totalPax = 1 + formData.familyDetails.length;
   const tier = getFamilyDiscountTier(totalPax);
@@ -38,15 +42,20 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
 
   const addMember = () => setMembers([...formData.familyDetails, emptyMember()]);
 
-  const removeMember = (index: number) =>
+  const removeMember = (index: number) => {
     setMembers(formData.familyDetails.filter((_, i) => i !== index));
+    setMemberErrors((prev) => {
+      const next = { ...prev };
+      delete next[index];
+      return next;
+    });
+  };
 
   const updateMember = (index: number, patch: Partial<FamilyMember>) =>
     setMembers(
       formData.familyDetails.map((m, i) => {
         if (i !== index) return m;
         const updated = { ...m, ...patch };
-        // Keep category valid when DOB changes.
         if (patch.dateOfBirth !== undefined) {
           const valid = getCategoriesByAge(patch.dateOfBirth);
           if (valid.length && !valid.includes(updated.category)) updated.category = valid[0];
@@ -54,6 +63,15 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
         return updated;
       })
     );
+
+  const clearError = (index: number, field: string) =>
+    setMemberErrors((prev) => ({
+      ...prev,
+      [index]: (prev[index] ?? []).filter((f) => f !== field),
+    }));
+
+  const hasError = (index: number, field: string) =>
+    memberErrors[index]?.includes(field) ?? false;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,19 +90,27 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
       return;
     }
 
-    const incomplete = formData.familyDetails.some(
-      (m) =>
-        !m.fullName ||
-        !m.dateOfBirth ||
-        !m.gender ||
-        !m.category ||
-        (needsLodging(m.category) && m.category !== 'child_3_12' && !validatePhone(m.phone))
-    );
-    if (incomplete) {
-      alert('Please complete all required fields for each family member.');
+    const newErrors: Record<number, string[]> = {};
+    formData.familyDetails.forEach((m, i) => {
+      const errs: string[] = [];
+      if (!m.fullName) errs.push('fullName');
+      if (!m.dateOfBirth) errs.push('dateOfBirth');
+      if (!m.gender) errs.push('gender');
+      if (!isChildCategory(m.category) && needsLodging(m.category) && !validatePhone(m.phone))
+        errs.push('phone');
+      if (errs.length) newErrors[i] = errs;
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setMemberErrors(newErrors);
+      const firstIdx = Math.min(...Object.keys(newErrors).map(Number));
+      document
+        .getElementById(`member-card-${firstIdx}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
+    setMemberErrors({});
     onNext();
   };
 
@@ -156,11 +182,19 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
 
             {formData.familyDetails.map((member, index) => {
               const categories = getCategoriesByAge(member.dateOfBirth);
-              const isChild = member.category === 'child_3_12' || member.category === 'child_under_3';
+              const isChild = isChildCategory(member.category);
+              const age = member.dateOfBirth ? calculateAge(member.dateOfBirth) : null;
+              const anyError = (memberErrors[index]?.length ?? 0) > 0;
+
               return (
                 <div
+                  id={`member-card-${index}`}
                   key={index}
-                  className="relative bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-5 animate-slide-up"
+                  className={`relative bg-slate-50 dark:bg-slate-800/60 border rounded-xl p-5 animate-slide-up ${
+                    anyError
+                      ? 'border-red-400 dark:border-red-500'
+                      : 'border-slate-200 dark:border-slate-700'
+                  }`}
                 >
                   <button
                     type="button"
@@ -170,42 +204,64 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
                   >
                     <Trash2 size={18} />
                   </button>
-                  <h3 className="font-semibold text-slate-800 dark:text-white mb-4">
+
+                  <h3 className="font-semibold text-slate-800 dark:text-white mb-1">
                     Family member {index + 1}
                   </h3>
+                  {anyError && (
+                    <p className="text-xs text-red-500 mb-3">
+                      Please fill in all highlighted fields below.
+                    </p>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                       <label className="form-label">Full Name *</label>
                       <input
                         type="text"
-                        required
                         value={member.fullName}
-                        onChange={(e) => updateMember(index, { fullName: e.target.value })}
-                        className="input-field"
+                        onChange={(e) => {
+                          updateMember(index, { fullName: e.target.value });
+                          if (e.target.value) clearError(index, 'fullName');
+                        }}
+                        className={`input-field ${hasError(index, 'fullName') ? 'border-red-500 focus:ring-red-400' : ''}`}
+                        placeholder="Full name"
                       />
                     </div>
                     <div>
                       <label className="form-label">Date of Birth *</label>
                       <input
                         type="date"
-                        required
                         max={maxDate}
                         value={member.dateOfBirth}
-                        onChange={(e) => updateMember(index, { dateOfBirth: e.target.value })}
-                        className="input-field"
+                        onChange={(e) => {
+                          updateMember(index, { dateOfBirth: e.target.value });
+                          if (e.target.value) clearError(index, 'dateOfBirth');
+                        }}
+                        className={`input-field ${hasError(index, 'dateOfBirth') ? 'border-red-500 focus:ring-red-400' : ''}`}
                       />
                     </div>
                     <div>
                       <label className="form-label">Gender *</label>
-                      <div className="flex gap-4 mt-2.5">
+                      <div
+                        className={`flex gap-4 mt-2.5 ${
+                          hasError(index, 'gender')
+                            ? 'border border-red-500 rounded-lg p-2'
+                            : ''
+                        }`}
+                      >
                         {(['male', 'female'] as const).map((g) => (
-                          <label key={g} className="flex items-center gap-1.5 capitalize text-sm">
+                          <label
+                            key={g}
+                            className="flex items-center gap-1.5 capitalize text-sm dark:text-slate-200"
+                          >
                             <input
                               type="radio"
-                              required
                               checked={member.gender === g}
-                              onChange={() => updateMember(index, { gender: g })}
+                              onChange={() => {
+                                updateMember(index, { gender: g });
+                                clearError(index, 'gender');
+                              }}
                               className="text-sunrise-600 focus:ring-sunrise-500"
                             />
                             {g}
@@ -219,7 +275,6 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
                     <div>
                       <label className="form-label">Category *</label>
                       <select
-                        required
                         disabled={!member.dateOfBirth}
                         value={member.category}
                         onChange={(e) =>
@@ -227,27 +282,46 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
                         }
                         className="input-field"
                       >
-                        {categories.map((c) => (
-                          <option key={c} value={c}>
-                            {CATEGORY_LABELS[c]} — RM {CATEGORY_RATES[c]}
-                          </option>
-                        ))}
+                        {categories.length > 0 ? (
+                          categories.map((c) => (
+                            <option key={c} value={c}>
+                              {CATEGORY_LABELS[c]} — RM {CATEGORY_RATES[c]}
+                            </option>
+                          ))
+                        ) : (
+                          <option value="">— enter date of birth first —</option>
+                        )}
                       </select>
-                      {!member.dateOfBirth && (
-                        <p className="text-xs text-slate-500 mt-1">Enter date of birth first.</p>
+                      {age !== null ? (
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          Age: {age} years
+                        </p>
+                      ) : (
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          Enter date of birth to auto-fill category.
+                        </p>
                       )}
                     </div>
+
                     {!isChild && (
                       <div>
                         <label className="form-label">Phone Number *</label>
                         <PhoneInput
                           country="my"
                           value={member.phone}
-                          onChange={(phone) => updateMember(index, { phone })}
-                          containerClass="phone-input-container"
+                          onChange={(phone) => {
+                            updateMember(index, { phone });
+                            if (validatePhone(phone)) clearError(index, 'phone');
+                          }}
+                          containerClass={`phone-input-container${hasError(index, 'phone') ? ' phone-error' : ''}`}
                           enableSearch
                           countryCodeEditable={false}
                         />
+                        {hasError(index, 'phone') && (
+                          <p className="text-red-500 text-xs mt-1">
+                            Please enter a valid phone number.
+                          </p>
+                        )}
                       </div>
                     )}
                   </div>
@@ -265,7 +339,7 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
                         }
                         className="h-4 w-4 text-sunrise-600 focus:ring-sunrise-500 rounded"
                       />
-                      <span className="text-sm">Food allergies</span>
+                      <span className="text-sm dark:text-slate-200">Food allergies</span>
                     </label>
                     {member.foodAllergies && (
                       <textarea
@@ -291,7 +365,7 @@ const FamilyRegistration = ({ formData, setFormData, onNext, onBack }: Props) =>
                         }
                         className="h-4 w-4 text-sunrise-600 focus:ring-sunrise-500 rounded"
                       />
-                      <span className="text-sm">Health issues / concerns</span>
+                      <span className="text-sm dark:text-slate-200">Health issues / concerns</span>
                     </label>
                     {member.healthIssues && (
                       <textarea
