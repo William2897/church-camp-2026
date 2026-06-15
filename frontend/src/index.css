@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased text-slate-800 dark:text-slate-100;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2.5 bg-sunrise-600 text-white font-medium rounded-lg shadow-sm
+           hover:bg-sunrise-700 disabled:opacity-50 disabled:cursor-not-allowed
+           transition-colors duration-200
+           dark:bg-sunrise-500 dark:hover:bg-sunrise-600;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-2.5 bg-slate-200 text-slate-700 font-medium rounded-lg
+           hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed
+           transition-colors duration-200
+           dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-900
+           focus:ring-2 focus:ring-sunrise-500 focus:border-transparent outline-none
+           transition-colors duration-200
+           dark:bg-slate-800 dark:border-slate-600 dark:text-white dark:focus:ring-sunrise-400;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-slate-800 dark:text-white mb-2;
+  }
+
+  .section-subtitle {
+    @apply text-slate-600 dark:text-slate-300 mb-6;
+  }
+
+  .card {
+    @apply bg-white dark:bg-slate-800/60 rounded-xl shadow-sm border border-slate-200
+           dark:border-slate-700 p-6;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-slate-100 dark:bg-slate-800;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-sunrise-400 dark:bg-sunrise-600 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-sunrise-500 dark:bg-sunrise-700;
+}
+
+/* react-phone-input-2 theming */
+.phone-input-container .form-control {
+  @apply w-full !h-[42px] pl-14 border border-slate-300 rounded-lg bg-white text-slate-900
+         dark:bg-slate-800 dark:border-slate-600 dark:text-white;
+}
+.phone-input-container .flag-dropdown {
+  @apply bg-transparent border-r border-slate-300 dark:border-slate-600 !rounded-l-lg;
+}
+.phone-input-container .selected-flag:hover,
+.phone-input-container .selected-flag.open {
+  @apply bg-slate-100 dark:bg-slate-700 !rounded-l-lg;
+}
+.phone-input-container .country-list {
+  @apply bg-white dark:bg-slate-800 shadow-lg;
+}
+.phone-input-container .country-list .country:hover,
+.phone-input-container .country-list .country.highlight {
+  @apply bg-sunrise-50 dark:bg-slate-700;
+}
