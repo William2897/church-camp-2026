@@ -102,7 +102,7 @@ const ParticipantInfo = ({ formData, setFormData, onNext, onBack }: Props) => {
   return (
     <div className="animate-fade-in">
       <h2 className="section-title">Your details</h2>
-      <p className="section-subtitle">Tell us a bit about yourself (the main registrant).</p>
+      <p className="section-subtitle">Main Registrant.</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
