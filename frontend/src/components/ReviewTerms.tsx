@@ -4,7 +4,6 @@ import { FormData, FamilyMember } from '../utils/types';
 import {
   CATEGORY_LABELS,
   Category,
-  CAMP,
   AccommodationType,
 } from '../utils/campConfig';
 import { calculateAge } from '../utils/pricing';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BedDouble, Home, Building2, Minus, Plus, Check, AlertTriangle, Users, X } from 'lucide-react';
+import { BedDouble, Home, Building2, Minus, Plus, Check, Users, X } from 'lucide-react';
 import { FormData } from '../utils/types';
 import { Availability, fetchAvailability } from '../utils/api';
 import {
@@ -63,7 +63,11 @@ const Gallery = ({ images, alt }: { images: string[]; alt: string }) => {
   const [active, setActive] = useState(0);
   return (
     <div>
-      <img src={images[active]} alt={alt} className="w-full h-44 object-cover rounded-lg" />
+      <img
+        src={images[active]}
+        alt={alt}
+        className="w-full max-h-72 object-contain rounded-lg bg-slate-100 dark:bg-slate-700"
+      />
       {images.length > 1 && (
         <div className="flex gap-2 mt-2 overflow-x-auto">
           {images.map((img, i) => (
@@ -74,11 +78,11 @@ const Gallery = ({ images, alt }: { images: string[]; alt: string }) => {
                 e.stopPropagation();
                 setActive(i);
               }}
-              className={`shrink-0 rounded-md overflow-hidden border-2 transition ${
+              className={`shrink-0 rounded-md overflow-hidden border-2 transition bg-slate-100 dark:bg-slate-700 ${
                 active === i ? 'border-sunrise-500' : 'border-transparent opacity-70'
               }`}
             >
-              <img src={img} alt={`${alt} ${i + 1}`} className="h-12 w-16 object-cover" />
+              <img src={img} alt={`${alt} ${i + 1}`} className="h-14 w-20 object-contain" />
             </button>
           ))}
         </div>
