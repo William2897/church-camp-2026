@@ -190,8 +190,7 @@ const ReviewTerms = ({ formData, setFormData, onNext, onBack }: Props) => {
             className="h-4 w-4 mt-0.5 text-sunrise-600 focus:ring-sunrise-500 rounded"
           />
           <span className="text-sm text-slate-700 dark:text-slate-200">
-            I confirm the information above is accurate and I agree to the terms &amp; conditions for{' '}
-            {CAMP.theme}.
+            I confirm the information above is accurate and I agree to the terms &amp; conditions for DAHC Church Camp 2026.
           </span>
         </label>
 

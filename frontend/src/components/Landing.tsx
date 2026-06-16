@@ -87,9 +87,9 @@ const Landing = ({ onNext }: LandingProps) => {
             <strong>Family package:</strong>{' '}
             {FAMILY_DISCOUNT_TIERS.map((t) => t.label).reverse().join(' · ')} (on registration fees)
           </li>
-          <li>Children under 3 may attend free — add them as a family member when a parent/guardian registers.</li>
+          <li>Children under 3 attend for free. Add them as a family member when a parent/guardian registers.</li>
           <li>
-            Optional room upgrades available — extra mattress (RM {MATTRESS_PER_NIGHT}/night) or a
+            Optional room upgrades available. Extra mattress (RM {MATTRESS_PER_NIGHT}/night) or a
             two-room suite for families.
           </li>
         </ul>

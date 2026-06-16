@@ -299,7 +299,6 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
               </p>
               {!SUITE_PRICE_CONFIRMED && (
                 <div className="mt-2 flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-400">
-                  <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
                   <span>
                     Suite pricing is indicative and being finalised — our team will confirm the
                     exact amount with you.
@@ -327,7 +326,7 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
                 <Users className="w-5 h-5 text-amber-500" />
-                Private room — confirmation
+                Private room confirmation
               </h3>
               <button
                 type="button"
@@ -347,7 +346,7 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
             </p>
             <p className="text-sm text-slate-600 dark:text-slate-300 mb-6">
               If you have a specific reason to request a private room, the camp team will review
-              it — select <em>Continue anyway</em> and we'll follow up with you.
+              it. Select <em>Continue anyway</em> and we'll follow up with you.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <button
