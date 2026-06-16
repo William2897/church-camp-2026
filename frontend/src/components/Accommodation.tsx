@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BedDouble, Home, Building2, Minus, Plus, Check, AlertTriangle } from 'lucide-react';
+import { BedDouble, Home, Building2, Minus, Plus, Check, AlertTriangle, Users, X } from 'lucide-react';
 import { FormData } from '../utils/types';
 import { Availability, fetchAvailability } from '../utils/api';
 import {
@@ -91,8 +91,10 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
   const { accommodation } = formData;
   const mattressEach = MATTRESS_PER_NIGHT * CAMP.nights;
   const suiteTotal = SUITE_UPGRADE_PER_NIGHT * CAMP.nights;
+  const isSingle = !formData.hasFamily;
 
   const [avail, setAvail] = useState<Availability | null>(null);
+  const [pendingType, setPendingType] = useState<AccommodationType | null>(null);
 
   // Pull live room counts; if a sold-out room is currently selected, fall back to dorm.
   useEffect(() => {
@@ -112,14 +114,28 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
   const twinSoldOut = !!avail && avail.twinLeft <= 0;
   const suiteSoldOut = !!avail && avail.suiteLeft <= 0;
 
-  const select = (next: AccommodationType) => {
-    if (next === 'twin_room' && twinSoldOut) return;
-    if (next === 'two_room_suite' && suiteSoldOut) return;
+  const applySelection = (next: AccommodationType) => {
     setFormData((prev) => ({
       ...prev,
       accommodation: next,
       extraMattresses: next === 'twin_room' ? prev.extraMattresses : 0,
     }));
+  };
+
+  const select = (next: AccommodationType) => {
+    if (next === 'twin_room' && twinSoldOut) return;
+    if (next === 'two_room_suite' && suiteSoldOut) return;
+    // Single registrants get a gateway warning before choosing a private room.
+    if (isSingle && (next === 'twin_room' || next === 'two_room_suite')) {
+      setPendingType(next);
+      return;
+    }
+    applySelection(next);
+  };
+
+  const confirmSingleOverride = () => {
+    if (pendingType) applySelection(pendingType);
+    setPendingType(null);
   };
 
   const setMattresses = (n: number) =>
@@ -156,6 +172,19 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
         charge</strong> unless you add extra mattresses or upgrade to a two-room suite. Choose what
         suits you below.
       </p>
+
+      {/* Single-registrant notice */}
+      {isSingle && (
+        <div className="flex items-start gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg mb-2 text-sm text-amber-800 dark:text-amber-200">
+          <Users className="w-5 h-5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+          <p>
+            <strong>Private rooms are reserved for couples and families.</strong> As a single
+            attendee, the dormitory is your standard option. If you have a specific reason to
+            request a private room, you may still select one — it will be subject to availability
+            and approval by the camp team.
+          </p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Dorm — default, no upgrade */}
@@ -290,6 +319,55 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
           </button>
         </div>
       </form>
+
+      {/* Gateway modal — single registrant choosing a private room */}
+      {pendingType && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-md p-6 animate-fade-in">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-amber-500" />
+                Private room — confirmation
+              </h3>
+              <button
+                type="button"
+                onClick={() => setPendingType(null)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-5">
+              The{' '}
+              <strong>
+                {pendingType === 'twin_room' ? 'Regular Twin Room' : 'Two-Room Suite'}
+              </strong>{' '}
+              is reserved for <strong>couples and families</strong>. As a single attendee, the
+              dormitory is your standard accommodation.
+            </p>
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-6">
+              If you have a specific reason to request a private room, the camp team will review
+              it — select <em>Continue anyway</em> and we'll follow up with you.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => { applySelection('dorm'); setPendingType(null); }}
+                className="btn-primary flex-1"
+              >
+                Choose Dormitory
+              </button>
+              <button
+                type="button"
+                onClick={confirmSingleOverride}
+                className="btn-secondary flex-1 text-sm"
+              >
+                Continue anyway
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
