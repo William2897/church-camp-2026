@@ -225,7 +225,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sunrise-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 transition-colors duration-200">
-      <div className="container mx-auto max-w-3xl px-4 py-6 md:py-10">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10">
         <header className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-2">
             <span className="text-lg font-bold bg-gradient-to-r from-slate-700 to-sunrise-600 dark:from-slate-200 dark:to-sunrise-400 bg-clip-text text-transparent">
