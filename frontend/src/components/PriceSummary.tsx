@@ -1,7 +1,6 @@
 import { Receipt } from 'lucide-react';
 import { FormData } from '../utils/types';
 import { calculateTotalPrice } from '../utils/pricing';
-import { CAMP } from '../utils/campConfig';
 
 const Row = ({
   label,
@@ -54,14 +53,14 @@ const PriceSummary = ({ formData }: { formData: FormData }) => {
 
         {p.mattressTotal > 0 && (
           <Row
-            label={`Extra mattresses (${CAMP.nights} nights)`}
+            label="Extra mattresses"
             value={`RM ${p.mattressTotal.toFixed(2)}`}
           />
         )}
 
         {p.suiteTotal > 0 && (
           <Row
-            label={`Two-room suite upgrade (${CAMP.nights} nights)`}
+            label="Two-room suite upgrade"
             value={`RM ${p.suiteTotal.toFixed(2)}`}
           />
         )}

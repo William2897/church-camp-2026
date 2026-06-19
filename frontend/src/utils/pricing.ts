@@ -1,10 +1,9 @@
 import {
-  CAMP,
   CATEGORY_RATES,
   Category,
   FAMILY_DISCOUNT_TIERS,
-  MATTRESS_PER_NIGHT,
-  SUITE_UPGRADE_PER_NIGHT,
+  MATTRESS_TOTAL,
+  SUITE_UPGRADE_TOTAL,
 } from './campConfig';
 import { FormData } from './types';
 
@@ -85,11 +84,11 @@ export const calculateTotalPrice = (formData: FormData): PriceBreakdown => {
   const lodging = bookingNeedsLodging(formData);
   const mattressTotal =
     lodging && formData.accommodation === 'twin_room'
-      ? formData.extraMattresses * MATTRESS_PER_NIGHT * CAMP.nights
+      ? formData.extraMattresses * MATTRESS_TOTAL
       : 0;
   const suiteTotal =
     lodging && formData.accommodation === 'two_room_suite'
-      ? SUITE_UPGRADE_PER_NIGHT * CAMP.nights
+      ? SUITE_UPGRADE_TOTAL
       : 0;
   const accommodationTotal = mattressTotal + suiteTotal;
 

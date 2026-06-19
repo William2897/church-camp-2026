@@ -71,18 +71,12 @@ export const MIN_FAMILY_PAX = 3;
 /* Accommodation add-ons                                              */
 /* ------------------------------------------------------------------ */
 
-/** Extra mattress in a regular twin room: RM50 per night, max 2 per room. */
-export const MATTRESS_PER_NIGHT = 50;
+/** Extra mattress in a twin room or suite: RM30 flat for the whole camp, max 2 per room. */
+export const MATTRESS_TOTAL = 30;
 export const MAX_MATTRESSES = 2;
 
-/**
- * ⚠️ PLACEHOLDER — Kimberley has not confirmed the two-room-suite top-up yet.
- * Suggested figures to discuss with Kim:
- *   • RM100–150 / night per suite, OR
- *   • a flat RM250–350 for the whole camp.
- * Update this constant once confirmed (see README, step 4).
- */
-export const SUITE_UPGRADE_PER_NIGHT = 150;
-export const SUITE_PRICE_CONFIRMED = false;
+/** Two-room suite upgrade: RM100 flat for the whole camp (confirmed). */
+export const SUITE_UPGRADE_TOTAL = 100;
+export const SUITE_PRICE_CONFIRMED = true;
 
 export type AccommodationType = 'dorm' | 'twin_room' | 'two_room_suite';

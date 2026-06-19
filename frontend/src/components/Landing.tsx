@@ -4,7 +4,7 @@ import {
   CAMP,
   CATEGORY_RATES,
   FAMILY_DISCOUNT_TIERS,
-  MATTRESS_PER_NIGHT,
+  MATTRESS_TOTAL,
 } from '../utils/campConfig';
 
 interface LandingProps {
@@ -89,7 +89,7 @@ const Landing = ({ onNext }: LandingProps) => {
           </li>
           <li>Children under 3 attend for free. Add them as a family member when a parent/guardian registers.</li>
           <li>
-            Optional room upgrades available. Extra mattress (RM {MATTRESS_PER_NIGHT}/night) or a
+            Optional room upgrades available. Extra mattress (RM {MATTRESS_TOTAL}) or a
             two-room suite for families.
           </li>
         </ul>

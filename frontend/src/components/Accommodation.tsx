@@ -3,11 +3,10 @@ import { BedDouble, Home, Building2, Minus, Plus, Check, Users, X } from 'lucide
 import { FormData } from '../utils/types';
 import { Availability, fetchAvailability } from '../utils/api';
 import {
-  CAMP,
   AccommodationType,
-  MATTRESS_PER_NIGHT,
+  MATTRESS_TOTAL,
   MAX_MATTRESSES,
-  SUITE_UPGRADE_PER_NIGHT,
+  SUITE_UPGRADE_TOTAL,
   SUITE_PRICE_CONFIRMED,
 } from '../utils/campConfig';
 
@@ -93,8 +92,8 @@ const Gallery = ({ images, alt }: { images: string[]; alt: string }) => {
 
 const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
   const { accommodation } = formData;
-  const mattressEach = MATTRESS_PER_NIGHT * CAMP.nights;
-  const suiteTotal = SUITE_UPGRADE_PER_NIGHT * CAMP.nights;
+  const mattressEach = MATTRESS_TOTAL;
+  const suiteTotal = SUITE_UPGRADE_TOTAL;
   const isSingle = !formData.hasFamily;
 
   const [avail, setAvail] = useState<Availability | null>(null);
@@ -238,7 +237,7 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
               <div className="flex items-center gap-2 mb-2">
                 <BedDouble className="w-4 h-4 text-slate-500" />
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                  Extra mattresses (RM {MATTRESS_PER_NIGHT}/night each · max {MAX_MATTRESSES})
+                  Extra mattresses (RM {MATTRESS_TOTAL} each · max {MAX_MATTRESSES})
                 </span>
               </div>
               <div className="flex items-center gap-4">
@@ -271,8 +270,7 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
                 </div>
                 {formData.extraMattresses > 0 && (
                   <span className="text-sm text-slate-600 dark:text-slate-300">
-                    + RM {(formData.extraMattresses * mattressEach).toFixed(0)} ({CAMP.nights}{' '}
-                    nights)
+                    + RM {(formData.extraMattresses * mattressEach).toFixed(0)}
                   </span>
                 )}
               </div>
@@ -299,7 +297,7 @@ const Accommodation = ({ formData, setFormData, onNext, onBack }: Props) => {
                 A separate bedroom plus a living area with kitchenette — ideal for larger families.
               </p>
               <p className="text-sm font-medium text-sunrise-600 dark:text-sunrise-400 mt-2">
-                + RM {suiteTotal.toFixed(0)} for the camp ({CAMP.nights} nights)
+                + RM {suiteTotal.toFixed(0)} upgrade (flat rate)
               </p>
               {!SUITE_PRICE_CONFIRMED && (
                 <div className="mt-2 flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-400">
