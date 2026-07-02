@@ -31,13 +31,12 @@ Open the printed local URL (usually http://localhost:5173).
    Until then the landing page shows a styled gradient fallback.
 2. **Backend.** Follow [`apps-script/SETUP.md`](apps-script/SETUP.md) to create the Google Sheet,
    deploy the Web App, and paste its URL into `frontend/.env` as `VITE_API_URL`.
-3. **Bank details.** Fill in the real church camp account in
-   [`frontend/src/utils/campConfig.ts`](frontend/src/utils/campConfig.ts) → `BANK_DETAILS`
-   (currently a placeholder).
-4. ⚠️ **Two-room suite price.** Confirm the suite top-up with **Kim**, then update
-   `SUITE_UPGRADE_PER_NIGHT` (and set `SUITE_PRICE_CONFIRMED = true`) in `campConfig.ts`.
-   Current placeholder: **RM150/night (RM300 for the 2-night camp)**.
-   Suggested range to discuss: RM100–150/night, or a flat RM250–350.
+3. **Payment.** Payment is collected via Adventist Giving
+   ([`frontend/src/utils/campConfig.ts`](frontend/src/utils/campConfig.ts) → `ADVENTIST_GIVING`) —
+   registrants pay at adventistgiving.org.my/donate, select Damansara Adventist Hope Centre and the
+   Church Camp fund, then upload their receipt and send a copy to Karshni.
+4. **Two-room suite price.** Confirmed with Kim: **RM100 flat** (see `SUITE_UPGRADE_TOTAL` in
+   `campConfig.ts`). Extra mattress: **RM30 flat** (`MATTRESS_TOTAL`).
 
 ## Pricing reference (edit in `frontend/src/utils/campConfig.ts`)
 

@@ -35,12 +35,12 @@ var CAMP = {
   contacts: 'William 011-6093 7110 &middot; Kimberley 011-1988 7239',
 };
 
-// ⚠️ Placeholder — keep in sync with the real account in frontend campConfig.ts.
-var BANK_DETAILS = {
-  bank: 'CIMB Bank Berhad',
-  accountName: 'SEVENTH-DAY ADVENTIST CORPORATION (MALAYSIA) BHD',
-  accountNumber: 'XXXX XXXX XXXX',
-  reference: 'Camp2026 + Your Name',
+// Payment is made via Adventist Giving — keep in sync with frontend campConfig.ts.
+var ADVENTIST_GIVING = {
+  url: 'https://adventistgiving.org.my/donate',
+  church: 'Damansara Adventist Hope Centre',
+  fund: 'Church Camp',
+  receiptContact: 'Karshni 011-5411 7197',
 };
 
 var BOOKINGS_HEADERS = [
@@ -308,15 +308,15 @@ function buildEmailHtml(bookingId, data, proofLink) {
     money(pricing.finalTotal) + '</td></tr>';
 
   var paymentNote = '';
-  if (data.paymentMethod === 'bank') {
+  if (data.paymentMethod === 'adventist_giving') {
     var received = (proofLink && proofLink.indexOf('http') === 0)
-      ? 'We have received your payment proof.'
-      : 'Please complete your bank transfer and submit your payment proof.';
+      ? 'We have received your payment receipt.'
+      : 'Please complete your payment via Adventist Giving and submit your receipt.';
     paymentNote =
-      '<p style="margin:0 0 6px;"><strong>Payment:</strong> Bank transfer. ' + received + '</p>' +
-      '<p style="margin:0;color:#64748b;font-size:13px;">' + BANK_DETAILS.bank + ' &middot; ' +
-      BANK_DETAILS.accountName + ' &middot; ' + BANK_DETAILS.accountNumber +
-      ' &middot; Ref: ' + BANK_DETAILS.reference + '</p>';
+      '<p style="margin:0 0 6px;"><strong>Payment:</strong> Adventist Giving. ' + received + '</p>' +
+      '<p style="margin:0;color:#64748b;font-size:13px;">' + ADVENTIST_GIVING.url + ' &middot; Church: ' +
+      ADVENTIST_GIVING.church + ' &middot; Fund: ' + ADVENTIST_GIVING.fund +
+      ' &middot; Send receipt to: ' + ADVENTIST_GIVING.receiptContact + '</p>';
   } else if (data.paymentMethod === 'deferred') {
     paymentNote = '<p style="margin:0;"><strong>Payment:</strong> Pay later — our team will contact you to arrange payment.</p>';
   }
@@ -410,7 +410,7 @@ function ageFromDob(dob) {
 }
 
 function labelCategory(c) { return CATEGORY_LABELS[c] || c || ''; }
-function labelPayment(m) { return m === 'bank' ? 'Bank Transfer' : m === 'deferred' ? 'Deferred' : (m || ''); }
+function labelPayment(m) { return m === 'adventist_giving' ? 'Adventist Giving' : m === 'deferred' ? 'Deferred' : (m || ''); }
 function num(v) { return typeof v === 'number' ? v : Number(v || 0); }
 
 function jsonOutput(obj) {

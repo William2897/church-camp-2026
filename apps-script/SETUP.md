@@ -80,8 +80,8 @@ registered, accommodation, price breakdown, payment note) using `MailApp` — **
   approve when prompted during deployment.
 - Free Gmail accounts can send ~**100 emails/day** (Google Workspace ~1,500). That's plenty for
   this camp. If an email ever fails, the booking is still saved — it just logs the error.
-- Edit the email's event/bank/contact text in the `CAMP` and `BANK_DETAILS` blocks near the top of
-  `Code.gs` (keep them in sync with the frontend `campConfig.ts`).
+- Edit the email's event/payment/contact text in the `CAMP` and `ADVENTIST_GIVING` blocks near the
+  top of `Code.gs` (keep them in sync with the frontend `campConfig.ts`).
 
 ## Notes
 

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { Upload, CreditCard, Clock, CheckCircle2 } from 'lucide-react';
+import { Upload, HeartHandshake, Clock, CheckCircle2, ExternalLink } from 'lucide-react';
 import { FormData } from '../utils/types';
-import { BANK_DETAILS } from '../utils/campConfig';
+import { ADVENTIST_GIVING } from '../utils/campConfig';
 import PriceSummary from './PriceSummary';
 
 interface Props {
@@ -35,8 +35,8 @@ const Payment = ({ formData, setFormData, onSubmit, onBack }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.paymentMethod === 'bank' && !formData.paymentProof) {
-      setError('Please upload your proof of payment.');
+    if (formData.paymentMethod === 'adventist_giving' && !formData.paymentProof) {
+      setError('Please upload your payment receipt.');
       return;
     }
     setError('');
@@ -63,20 +63,23 @@ const Payment = ({ formData, setFormData, onSubmit, onBack }: Props) => {
               <input
                 type="radio"
                 name="paymentMethod"
-                value="bank"
-                checked={formData.paymentMethod === 'bank'}
+                value="adventist_giving"
+                checked={formData.paymentMethod === 'adventist_giving'}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, paymentMethod: e.target.value as 'bank' }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    paymentMethod: e.target.value as 'adventist_giving',
+                  }))
                 }
                 className="mt-1 text-sunrise-600 focus:ring-sunrise-500"
               />
               <div>
                 <p className="font-medium flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-sunrise-500" /> Bank transfer
+                  <HeartHandshake className="w-4 h-4 text-sunrise-500" /> Adventist Giving
                 </p>
                 <p className="text-sm text-slate-600 dark:text-slate-300">
-                  Transfer the total amount and upload your receipt. Registrations without valid
-                  proof may be voided.
+                  Pay online via Adventist Giving and upload your receipt. Registrations without a
+                  valid receipt may be voided.
                 </p>
               </div>
             </label>
@@ -103,18 +106,40 @@ const Payment = ({ formData, setFormData, onSubmit, onBack }: Props) => {
             </label>
           </fieldset>
 
-          {formData.paymentMethod === 'bank' && (
+          {formData.paymentMethod === 'adventist_giving' && (
             <div className="animate-slide-up bg-slate-50 dark:bg-slate-800/60 rounded-lg p-5 space-y-4">
-              <div className="text-sm space-y-1">
-                <p className="font-medium text-slate-800 dark:text-white mb-2">Bank account details</p>
-                <p><strong>Bank:</strong> {BANK_DETAILS.bank}</p>
-                <p><strong>Account name:</strong> {BANK_DETAILS.accountName}</p>
-                <p><strong>Account number:</strong> {BANK_DETAILS.accountNumber}</p>
-                <p><strong>Reference:</strong> {BANK_DETAILS.reference}</p>
+              <div className="text-sm space-y-2">
+                <p className="font-medium text-slate-800 dark:text-white mb-1">How to pay</p>
+                <ol className="list-decimal list-inside space-y-1 text-slate-600 dark:text-slate-300">
+                  <li>
+                    Go to{' '}
+                    <a
+                      href={ADVENTIST_GIVING.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sunrise-600 dark:text-sunrise-400 underline inline-flex items-center gap-1"
+                    >
+                      adventistgiving.org.my/donate <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </li>
+                  <li>
+                    Select <strong>{ADVENTIST_GIVING.church}</strong> as your church
+                  </li>
+                  <li>
+                    Scroll down and choose the <strong>{ADVENTIST_GIVING.fund}</strong> option
+                  </li>
+                  <li>Complete your payment and save your receipt</li>
+                  <li>
+                    Upload the receipt below, and send a copy to{' '}
+                    <strong>
+                      {ADVENTIST_GIVING.receiptContact.name} ({ADVENTIST_GIVING.receiptContact.phone})
+                    </strong>
+                  </li>
+                </ol>
               </div>
 
               <div>
-                <label className="form-label">Upload payment proof *</label>
+                <label className="form-label">Upload payment receipt *</label>
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   className="mt-1 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center cursor-pointer hover:border-sunrise-500 transition"

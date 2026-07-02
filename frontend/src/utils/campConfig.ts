@@ -20,15 +20,12 @@ export const CAMP = {
   ],
 };
 
-/**
- * ⚠️ PLACEHOLDER bank details — replace with the real church camp account
- * before going live (see README, step 3).
- */
-export const BANK_DETAILS = {
-  bank: 'CIMB Bank Berhad',
-  accountName: 'SEVENTH-DAY ADVENTIST CORPORATION (MALAYSIA) BHD',
-  accountNumber: 'XXXX XXXX XXXX',
-  reference: 'Camp2026 + Your Name',
+/** Payment is made via Adventist Giving — no bank transfer. */
+export const ADVENTIST_GIVING = {
+  url: 'https://adventistgiving.org.my/donate',
+  church: 'Damansara Adventist Hope Centre',
+  fund: 'Church Camp',
+  receiptContact: { name: 'Karshni', phone: '011-5411 7197' },
 };
 
 /* ------------------------------------------------------------------ */

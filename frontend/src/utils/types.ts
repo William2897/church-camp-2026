@@ -47,7 +47,7 @@ export interface FormData {
   extraMattresses: number;
 
   // Payment
-  paymentMethod: '' | 'bank' | 'deferred';
+  paymentMethod: '' | 'adventist_giving' | 'deferred';
   paymentProof: File | null;
   termsAccepted: boolean;
 }
