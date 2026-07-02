@@ -40,7 +40,7 @@ var ADVENTIST_GIVING = {
   url: 'https://adventistgiving.org.my/donate',
   church: 'Damansara Adventist Hope Centre',
   fund: 'Church Camp',
-  receiptContact: 'Karshni 011-5411 7197',
+  receiptContact: 'Kimberley 011-1988 7239',
 };
 
 var BOOKINGS_HEADERS = [

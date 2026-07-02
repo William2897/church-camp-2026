@@ -25,7 +25,7 @@ export const ADVENTIST_GIVING = {
   url: 'https://adventistgiving.org.my/donate',
   church: 'Damansara Adventist Hope Centre',
   fund: 'Church Camp',
-  receiptContact: { name: 'Karshni', phone: '011-5411 7197' },
+  receiptContact: { name: 'Kimberley', phone: '011-1988 7239' },
 };
 
 /* ------------------------------------------------------------------ */
